@@ -2,7 +2,6 @@ package ru.osslabs.modules.report
 
 import org.jgrapht.graph.DefaultDirectedGraph
 import org.jgrapht.graph.builder.DirectedGraphBuilder
-import ru.osslabs.model.datasource.DataObject
 import spock.lang.Specification
 
 /**
@@ -223,6 +222,30 @@ class GraphObjectBuilderTest extends Specification {
                         new GraphEdgeFactory()))
                 .addEdgeChain(new GraphVertex(name: "person", gvId: 0), new GraphVertex(name: "firstName", gvId: 1))
                 .addEdgeChain(new GraphVertex(name: "person", gvId: 0), new GraphVertex(name: "lastName", gvId: 2))
+                .buildUnmodifiable()
+    }
+
+    def "builder might include reference on fragment with fields which is concrete type"() {
+        given:
+        GraphObjectBuilder builder = new GraphObjectBuilder()
+
+        when:
+        def graph = builder.graph {
+            person {
+                firstName
+                fragment(type: Mother) {
+                    haveIsHusband
+                }
+            }
+        }
+
+        then:
+        graph == new DirectedGraphBuilder<>(
+                new DefaultDirectedGraph(
+                        new GraphEdgeFactory()))
+                .addEdgeChain(new GraphVertex(name: "person", gvId: 0), new GraphVertex(name: "firstName", gvId: 1))
+                .addEdgeChain(new GraphVertex(name: "person", gvId: 0), new GraphVertex(name: "Mother", gvId: 2))
+                .addEdgeChain(new GraphVertex(name: "Mother", gvId: 2), new GraphVertex(name: "haveIsHusband", gvId: 3))
                 .buildUnmodifiable()
     }
 }
