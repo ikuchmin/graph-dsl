@@ -7,6 +7,6 @@ import groovy.transform.Canonical
  */
 @Canonical
 class GraphEdge {
-    GraphVertex sourceVertex;
-    GraphVertex targetVertex;
+    FieldVertex sourceVertex;
+    FieldVertex targetVertex;
 }

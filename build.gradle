@@ -1,12 +1,16 @@
 apply plugin: 'groovy'
+apply plugin: 'maven-publish'
+
+group = 'ru.osslabs.platform'
+version = '0.0.1-SNAPSHOT'
 
 repositories {
-    mavenCentral()
+    jcenter()
     mavenLocal()
 }
 
 dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.4.5:indy'
+    compile 'org.codehaus.groovy:groovy-all:2.4.6:indy'
     compile 'ru.osslabs.platform:models:1.0-SNAPSHOT'
     compile 'ru.osslabs.platform:commons:1.0-SNAPSHOT'
     compile 'ru.osslabs.platform:datasources-module:1.0-SNAPSHOT'
@@ -19,3 +23,18 @@ dependencies {
 tasks.withType(GroovyCompile) {
     groovyOptions.optimizationOptions.indy = true
 }
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+publishing {
+    publications {
+        main(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+        }
+    }
+}
+
