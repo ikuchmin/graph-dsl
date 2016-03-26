@@ -1,4 +1,4 @@
-package ru.osslabs.modules.report
+package ru.osslabs.lang
 
 import ru.osslabs.datasources.cmdbuild.CMDBuildWrapperWS
 import spock.lang.Specification

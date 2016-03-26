@@ -11,10 +11,11 @@ repositories {
 
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.4.6:indy'
-    compile 'ru.osslabs.platform:models:1.0-SNAPSHOT'
-    compile 'ru.osslabs.platform:commons:1.0-SNAPSHOT'
-    compile 'ru.osslabs.platform:datasources-module:1.0-SNAPSHOT'
-    compile 'org.jgrapht:jgrapht-core:0.9.1'
+    compile 'ru.osslabs.platform:graph-core:1.1-SNAPSHOT'
+//    compile 'ru.osslabs.platform:models:1.0-SNAPSHOT'
+//    compile 'ru.osslabs.platform:commons:1.0-SNAPSHOT'
+//    compile 'ru.osslabs.platform:datasources-module:1.0-SNAPSHOT'
+//    compile 'org.jgrapht:jgrapht-core:0.9.1'
 //    testCompile 'junit:junit:4.12'
 
     testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'

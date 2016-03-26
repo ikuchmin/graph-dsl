@@ -1,8 +1,7 @@
-package ru.osslabs.modules.report
+package ru.osslabs.lang
 
 import groovy.json.JsonBuilder
 import groovy.json.JsonOutput
-import groovy.json.JsonSlurper
 import org.junit.Test
 
 /**

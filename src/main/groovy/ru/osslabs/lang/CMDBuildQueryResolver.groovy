@@ -1,6 +1,5 @@
-package ru.osslabs.modules.report
+package ru.osslabs.lang
 
-import ru.osslabs.model.datasource.DataObject
 import ru.osslabs.model.datasource.ExternalDataSource
 
 /**

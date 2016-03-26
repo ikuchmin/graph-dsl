@@ -1,14 +1,11 @@
-package ru.osslabs.modules.report
+package ru.osslabs.lang
 
 import org.jgrapht.event.ConnectedComponentTraversalEvent
 import org.jgrapht.event.EdgeTraversalEvent
 import org.jgrapht.event.TraversalListenerAdapter
 import org.jgrapht.event.VertexTraversalEvent
 import org.jgrapht.graph.DefaultDirectedGraph
-import org.jgrapht.graph.SimpleGraph
 import org.jgrapht.graph.builder.DirectedGraphBuilder
-import org.jgrapht.graph.builder.UndirectedGraphBuilder
-import org.jgrapht.traverse.BreadthFirstIterator
 import org.jgrapht.traverse.DepthFirstIterator
 import spock.lang.Specification
 
@@ -31,7 +28,7 @@ class GraphObjectBuilderTest extends Specification {
         graph == new DirectedGraphBuilder(
                 new DefaultDirectedGraph(
                         new GraphEdgeFactory<>()))
-                .addVertex(new FieldVertex(name: "persons", gvId: 0))
+                .addVertex(new GraphVertex(name: "persons", gvId: 0, attributes: [:]))
                 .buildUnmodifiable();
     }
 
@@ -48,7 +45,7 @@ class GraphObjectBuilderTest extends Specification {
         graph == new DirectedGraphBuilder(
                 new DefaultDirectedGraph(
                         new GraphEdgeFactory<>()))
-                .addVertex(new FieldVertex(name: "persons", gvId: 0))
+                .addVertex(new GraphVertex(name: "persons", gvId: 0, attributes: [:]))
                 .buildUnmodifiable();
 
     }
@@ -68,7 +65,7 @@ class GraphObjectBuilderTest extends Specification {
         graph == new DirectedGraphBuilder<>(
                 new DefaultDirectedGraph(
                         new GraphEdgeFactory()))
-                .addEdge(new FieldVertex(name: "persons", gvId: 0), new FieldVertex(name: "firstName", gvId: 1))
+                .addEdge(new GraphVertex(name: "persons", gvId: 0, attributes: [:]), new GraphVertex(name: "firstName", gvId: 1, attributes: [:]))
                 .buildUnmodifiable();
     }
 
@@ -87,7 +84,7 @@ class GraphObjectBuilderTest extends Specification {
         graph == new DirectedGraphBuilder<>(
                 new DefaultDirectedGraph(
                         new GraphEdgeFactory()))
-                .addEdge(new FieldVertex(name: "persons", gvId: 0), new FieldVertex(name: "firstName", gvId: 1))
+                .addEdge(new GraphVertex(name: "persons", gvId: 0, attributes: [:]), new GraphVertex(name: "firstName", gvId: 1, attributes: [:]))
                 .buildUnmodifiable();
     }
 
@@ -111,8 +108,8 @@ class GraphObjectBuilderTest extends Specification {
         graph == new DirectedGraphBuilder<>(
                 new DefaultDirectedGraph(
                         new GraphEdgeFactory()))
-                .addEdgeChain(new FieldVertex(name: "person", gvId: 0), new FieldVertex(name: "firstName", gvId: 1), new FieldVertex(name: "value", gvId: 2))
-                .addEdgeChain(new FieldVertex(name: "person", gvId: 0), new FieldVertex(name: "lastName", gvId: 3), new FieldVertex(name: "value", gvId: 4))
+                .addEdgeChain(new GraphVertex(name: "person", gvId: 0), new GraphVertex(name: "firstName", gvId: 1), new GraphVertex(name: "value", gvId: 2))
+                .addEdgeChain(new GraphVertex(name: "person", gvId: 0), new GraphVertex(name: "lastName", gvId: 3), new GraphVertex(name: "value", gvId: 4))
                 .buildUnmodifiable()
 
         graph.edgeSet().size() == graph.vertexSet().size() - 1 // https://en.wikipedia.org/wiki/Tree_(graph_theory)
@@ -129,7 +126,7 @@ class GraphObjectBuilderTest extends Specification {
 
         then:
         graph == new DirectedGraphBuilder<>(new DefaultDirectedGraph(new GraphEdgeFactory()))
-                .addVertex(new FieldVertex(name: "person", gvId: 0, attributes: [id: 123]))
+                .addVertex(new GraphVertex(name: "person", gvId: 0, attributes: [id: 123]))
                 .buildUnmodifiable()
     }
 
@@ -144,7 +141,7 @@ class GraphObjectBuilderTest extends Specification {
 
         then:
         graph == new DirectedGraphBuilder<>(new DefaultDirectedGraph(new GraphEdgeFactory()))
-                .addVertex(new FieldVertex(name: "person", gvId: 0, attributes: [id: 123]))
+                .addVertex(new GraphVertex(name: "person", gvId: 0, attributes: [id: 123]))
                 .buildUnmodifiable()
     }
 
@@ -159,7 +156,7 @@ class GraphObjectBuilderTest extends Specification {
 
         then:
         graph == new DirectedGraphBuilder<>(new DefaultDirectedGraph(new GraphEdgeFactory()))
-                .addVertex(new FieldVertex(name: "person", gvId: 0, attributes: [id: 123]))
+                .addVertex(new GraphVertex(name: "person", gvId: 0, attributes: [id: 123]))
                 .buildUnmodifiable()
     }
 
@@ -174,7 +171,7 @@ class GraphObjectBuilderTest extends Specification {
 
         then:
         graph == new DirectedGraphBuilder<>(new DefaultDirectedGraph(new GraphEdgeFactory()))
-                .addVertex(new FieldVertex(name: "person", gvId: 0, attributes: [id: "i13dsr"]))
+                .addVertex(new GraphVertex(name: "person", gvId: 0, attributes: [id: "i13dsr"]))
                 .buildUnmodifiable()
     }
 
@@ -192,8 +189,8 @@ class GraphObjectBuilderTest extends Specification {
 
         then:
         graph == new DirectedGraphBuilder<>(new DefaultDirectedGraph(new GraphEdgeFactory())).addEdge(
-                new FieldVertex(name: "persons", gvId: 0, attributes: [filter: filter]),
-                new FieldVertex(name: "age", gvId: 1)
+                new GraphVertex(name: "persons", gvId: 0, attributes: [filter: filter]),
+                new GraphVertex(name: "age", gvId: 1)
         ).buildUnmodifiable()
     }
 
@@ -228,8 +225,8 @@ class GraphObjectBuilderTest extends Specification {
         graph == new DirectedGraphBuilder<>(
                 new DefaultDirectedGraph(
                         new GraphEdgeFactory()))
-                .addEdgeChain(new FieldVertex(name: "person", gvId: 0), new FieldVertex(name: "firstName", gvId: 1))
-                .addEdgeChain(new FieldVertex(name: "person", gvId: 0), new FieldVertex(name: "lastName", gvId: 2))
+                .addEdgeChain(new GraphVertex(name: "person", gvId: 0), new GraphVertex(name: "firstName", gvId: 1))
+                .addEdgeChain(new GraphVertex(name: "person", gvId: 0), new GraphVertex(name: "lastName", gvId: 2))
                 .buildUnmodifiable()
     }
 
@@ -251,8 +248,8 @@ class GraphObjectBuilderTest extends Specification {
         graph == new DirectedGraphBuilder<>(
                 new DefaultDirectedGraph(
                         new GraphEdgeFactory()))
-                .addEdgeChain(new FieldVertex(name: "person", gvId: 0), new FieldVertex(name: "firstName", gvId: 1))
-                .addEdgeChain(new FieldVertex(name: "person", gvId: 0), new FieldVertex(name: "haveIsHusband", type: "Mother", gvId: 2))
+                .addEdgeChain(new GraphVertex(name: "person", gvId: 0), new GraphVertex(name: "firstName", gvId: 1))
+                .addEdgeChain(new GraphVertex(name: "person", gvId: 0), new GraphVertex(name: "haveIsHusband", type: "Mother", gvId: 2))
                 .buildUnmodifiable()
     }
 
@@ -280,8 +277,8 @@ class GraphObjectBuilderTest extends Specification {
         graph == new DirectedGraphBuilder<>(
                 new DefaultDirectedGraph(
                         new GraphEdgeFactory()))
-                .addEdgeChain(new FieldVertex(name: "person", gvId: 0, id: "Ivanov", type: "Person"), new FieldVertex(name: "firstName", type: "Person", gvId: 1))
-                .addEdgeChain(new FieldVertex(name: "person", gvId: 0), new FieldVertex(name: "haveIsHusband", type: "Mother", gvId: 2))
+                .addEdgeChain(new GraphVertex(name: "person", gvId: 0, id: "Ivanov", type: "Person"), new GraphVertex(name: "firstName", type: "Person", gvId: 1))
+                .addEdgeChain(new GraphVertex(name: "person", gvId: 0), new GraphVertex(name: "haveIsHusband", type: "Mother", gvId: 2))
                 .buildUnmodifiable()
     }
 
@@ -311,8 +308,8 @@ class GraphObjectBuilderTest extends Specification {
         graph == new DirectedGraphBuilder<>(
                 new DefaultDirectedGraph(
                         new GraphEdgeFactory()))
-                .addEdgeChain(new FieldVertex(name: "person", gvId: 0, id: "Ivanov", type: "Person"), new FieldVertex(name: "firstName", type: "Person", gvId: 1))
-                .addEdgeChain(new FieldVertex(name: "person", gvId: 0), new FieldVertex(name: "haveIsHusband", type: "Mother", gvId: 2))
+                .addEdgeChain(new GraphVertex(name: "person", gvId: 0, id: "Ivanov", type: "Person"), new GraphVertex(name: "firstName", type: "Person", gvId: 1))
+                .addEdgeChain(new GraphVertex(name: "person", gvId: 0), new GraphVertex(name: "haveIsHusband", type: "Mother", gvId: 2))
                 .buildUnmodifiable()
     }
 
@@ -341,8 +338,8 @@ class GraphObjectBuilderTest extends Specification {
         def graph2 = new DirectedGraphBuilder<>(
                 new DefaultDirectedGraph<>(
                         new GraphEdgeFactory()))
-                .addEdgeChain(new FieldVertex(name: "person", gvId: 0, id: "Ivanov", type: "Person"), new FieldVertex(name: "firstName", type: "Person", gvId: 1), new FieldVertex(name: "value", type: "Person", gvId: 3))
-                .addEdgeChain(new FieldVertex(name: "person", gvId: 0, id: "Ivanov", type: "Person"), new FieldVertex(name: "haveIsHusband", type: "Mother", gvId: 2), new FieldVertex(name: "value", type: "Person", gvId: 4))
+                .addEdgeChain(new GraphVertex(name: "person", gvId: 0, id: "Ivanov", type: "Person"), new GraphVertex(name: "firstName", type: "Person", gvId: 1), new GraphVertex(name: "value", type: "Person", gvId: 3))
+                .addEdgeChain(new GraphVertex(name: "person", gvId: 0, id: "Ivanov", type: "Person"), new GraphVertex(name: "haveIsHusband", type: "Mother", gvId: 2), new GraphVertex(name: "value", type: "Person", gvId: 4))
                 .buildUnmodifiable()
 
 

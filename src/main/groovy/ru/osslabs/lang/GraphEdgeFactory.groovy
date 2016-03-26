@@ -1,4 +1,4 @@
-package ru.osslabs.modules.report
+package ru.osslabs.lang
 
 import org.jgrapht.EdgeFactory
 
