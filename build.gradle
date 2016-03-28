@@ -9,6 +9,28 @@ repositories {
     mavenLocal()
 }
 
+compileGroovy {
+    dependsOn = []
+}
+
+classes {
+    dependsOn = [compileGroovy]
+}
+
+compileTestGroovy {
+    dependsOn = [classes]
+}
+
+testClasses {
+    dependsOn = [compileTestGroovy]
+}
+
+sourceSets {
+    main {
+        groovy { srcDirs = ["src/main/java", "src/main/groovy"] }  // compile   everything in src/ with groovy
+    }
+}
+
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.4.6:indy'
     compile 'ru.osslabs.platform:graph-core:1.1-SNAPSHOT'
@@ -19,6 +41,7 @@ dependencies {
 //    testCompile 'junit:junit:4.12'
 
     testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+//    compile 'ru.osslabs.platform:graph-core:1.1-SNAPSHOT:tests'
 }
 
 tasks.withType(GroovyCompile) {

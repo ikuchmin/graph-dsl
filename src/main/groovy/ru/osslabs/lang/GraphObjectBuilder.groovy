@@ -1,56 +1,60 @@
 package ru.osslabs.lang
-
-import org.jgrapht.DirectedGraph
-import org.jgrapht.graph.DefaultDirectedGraph
-import org.jgrapht.graph.builder.DirectedGraphBuilder
-
 /**
  * Created by ikuchmin on 19.01.16.
  */
+//@CompileStatic
 class GraphObjectBuilder extends BuilderSupport {
 
+    final BuilderGraph builderGraph;
     Long nextID
 
-    DirectedGraphBuilder<GraphVertex, GraphEdge, DirectedGraph<GraphVertex, GraphEdge>> graphBuilder
-
     GraphObjectBuilder() {
-        graphBuilder = new DirectedGraphBuilder<>(new DefaultDirectedGraph<>(new GraphEdgeFactory<GraphVertex, GraphEdge>()))
+        super()
+        builderGraph = new BuilderGraph(BuilderEdge.metaClass.&invokeConstructor)
         nextID = 0L
     }
 
-    DirectedGraph<GraphVertex, GraphEdge> graph(Closure closure) {
+    BuilderGraph graph(Closure closure) {
         if (closure != null) {
             // let's register the builder as the delegate
             setClosureDelegate(closure, this);
-            graphBuilder.addVertex(closure.call() as GraphVertex);
+            closure()
         }
 
-        graphBuilder.buildUnmodifiable();
+        return builderGraph
     }
 
     @Override
     protected void setParent(Object parent, Object child) {
-        graphBuilder.addEdge(parent as GraphVertex, child as GraphVertex);
+        builderGraph.addEdge(parent as BuilderVertex, child as BuilderVertex)
     }
 
     @Override
     protected Object createNode(Object name) {
-        new GraphVertex(name: name, gvId: nextID++, attributes: [:])
+        def vertex = new BuilderVertex(name: name, gvId: nextID++, attributes: [:])
+        builderGraph.addVertex(vertex)
+        return vertex
     }
 
     @Override
     protected Object createNode(Object name, Object value) {
-        new GraphVertex(name: name, gvId: nextID++, attributes: [id: value])
+        def vertex = new BuilderVertex(name: name, gvId: nextID++, attributes: [id: value])
+        builderGraph.addVertex(vertex)
+        return vertex
     }
 
     @Override
     protected Object createNode(Object name, Map attributes) {
-        new GraphVertex(name: name, gvId: nextID++, attributes: attributes)
+        def vertex = new BuilderVertex(name: name, gvId: nextID++, attributes: attributes)
+        builderGraph.addVertex(vertex)
+        return vertex
     }
 
     @Override
     protected Object createNode(Object name, Map attributes, Object value) {
-        new GraphVertex(name: name, gvId: nextID++, attributes: (attributes + [id: value]))
+        def vertex = new BuilderVertex(name: name, gvId: nextID++, attributes: (attributes + [id: value]))
+        builderGraph.addVertex(vertex)
+        return vertex
     }
 
     def propertyMissing(String methodName) {

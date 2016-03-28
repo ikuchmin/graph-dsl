@@ -1,19 +1,16 @@
 package ru.osslabs.lang
 
 import groovy.transform.Canonical
+import groovy.transform.CompileStatic
 import groovy.transform.Immutable
+import ru.osslabs.graph.Edge
+
 
 /**
  * Created by ikuchmin on 19.01.16.
  */
-
-@Immutable
+@Canonical
 class GraphVertex {
-    Integer gvId
-    String name
-    Map attributes
-
-    def propertyMissing(String name) {
-        return attributes[name]
-    }
+    final String name
 }
+
