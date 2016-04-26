@@ -1,4 +1,8 @@
 package ru.osslabs.lang
+
+import ru.osslabs.integrations.lang.domain.GraphEdge
+import ru.osslabs.integrations.lang.domain.UUIDGraphVertex
+
 /**
  * Created by ikuchmin on 19.01.16.
  */
@@ -10,7 +14,7 @@ class GraphObjectBuilder extends BuilderSupport {
 
     GraphObjectBuilder() {
         super()
-        builderGraph = new BuilderGraph(BuilderEdge.metaClass.&invokeConstructor)
+        builderGraph = new BuilderGraph(GraphEdge.metaClass.&invokeConstructor)
         nextID = 0L
     }
 
@@ -26,33 +30,37 @@ class GraphObjectBuilder extends BuilderSupport {
 
     @Override
     protected void setParent(Object parent, Object child) {
-        builderGraph.addEdge(parent as BuilderVertex, child as BuilderVertex)
+        builderGraph.addEdge(parent as UUIDGraphVertex, child as UUIDGraphVertex)
     }
 
     @Override
     protected Object createNode(Object name) {
-        def vertex = new BuilderVertex(name: name, gvId: nextID++, attributes: [:])
+//        def vertex = new UUIDGraphVertex(name: name, attributes: [:])
+        def vertex = new UUIDGraphVertex(name)
         builderGraph.addVertex(vertex)
         return vertex
     }
 
     @Override
     protected Object createNode(Object name, Object value) {
-        def vertex = new BuilderVertex(name: name, gvId: nextID++, attributes: [id: value])
+//        def vertex = new UUIDGraphVertex(name: name, attributes: [id: value])
+        def vertex = new UUIDGraphVertex(name)
         builderGraph.addVertex(vertex)
         return vertex
     }
 
     @Override
     protected Object createNode(Object name, Map attributes) {
-        def vertex = new BuilderVertex(name: name, gvId: nextID++, attributes: attributes)
+//        def vertex = new UUIDGraphVertex(name: name, attributes: attributes)
+        def vertex = new UUIDGraphVertex(name)
         builderGraph.addVertex(vertex)
         return vertex
     }
 
     @Override
     protected Object createNode(Object name, Map attributes, Object value) {
-        def vertex = new BuilderVertex(name: name, gvId: nextID++, attributes: (attributes + [id: value]))
+//        def vertex = new BuilderVertex(name: name, gvId: nextID++, attributes: (attributes + [id: value]))
+        def vertex = new UUIDGraphVertex(name)
         builderGraph.addVertex(vertex)
         return vertex
     }

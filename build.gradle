@@ -1,4 +1,6 @@
+apply plugin: 'java'
 apply plugin: 'groovy'
+apply plugin: 'jacoco'
 apply plugin: 'maven-publish'
 
 group = 'ru.osslabs.platform'
@@ -34,30 +36,45 @@ sourceSets {
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.4.6:indy'
     compile 'ru.osslabs.platform:graph-core:1.1-SNAPSHOT'
-//    compile 'ru.osslabs.platform:models:1.0-SNAPSHOT'
-//    compile 'ru.osslabs.platform:commons:1.0-SNAPSHOT'
-//    compile 'ru.osslabs.platform:datasources-module:1.0-SNAPSHOT'
-//    compile 'org.jgrapht:jgrapht-core:0.9.1'
-//    testCompile 'junit:junit:4.12'
-
+    compile 'ru.osslabs.platform:platform-vertices-domain:1.0-SNAPSHOT'
     testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
-//    compile 'ru.osslabs.platform:graph-core:1.1-SNAPSHOT:tests'
 }
 
 tasks.withType(GroovyCompile) {
     groovyOptions.optimizationOptions.indy = true
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
+task sourceJar(type: Jar, dependsOn: classes) {
     from sourceSets.main.allSource
 }
 
 publishing {
+    repositories {
+        maven {
+            name 'mavenRepositorySnapshots'
+            credentials {
+                username nexusUsername
+                password nexusPassword
+            }
+            url 'http://maven-repository.osslabs.ru/content/repositories/snapshots/'
+        }
+        maven {
+            name 'mavenRepositoryReleases'
+            credentials {
+                username nexusUsername
+                password nexusPassword
+            }
+            url 'http://maven-repository.osslabs.ru/content/repositories/releases/'
+        }
+    }
+
     publications {
-        main(MavenPublication) {
+        mainJava(MavenPublication) {
             from components.java
-            artifact sourcesJar
+
+            artifact sourceJar {
+                classifier = 'sources'
+            }
         }
     }
 }
