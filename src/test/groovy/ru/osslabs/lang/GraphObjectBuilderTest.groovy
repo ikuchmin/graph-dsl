@@ -1,5 +1,6 @@
 package ru.osslabs.lang
 
+import ru.osslabs.integrations.lang.domain.IdCondition
 import spock.lang.Ignore
 import spock.lang.Specification
 
@@ -76,7 +77,6 @@ class GraphObjectBuilderTest extends Specification {
         graph.edges.size() == graph.vertices.size() - 1 // https://en.wikipedia.org/wiki/Tree_(graph_theory)
     }
 
-    @Ignore('TODO')
     def "field in builder can has explicit property id"() {
         when:
         def graph = builder.graph {
@@ -84,10 +84,10 @@ class GraphObjectBuilderTest extends Specification {
         }
 
         then:
-        graph.findVertexByName('person').first().id == 123
+        graph.findVertexByName('person').get()
+                .getConditions().contains(new IdCondition<Integer>(123))
     }
 
-    @Ignore('TODO')
     def "method in builder can has explicit property id"() {
         when:
         def graph = builder.graph {
@@ -95,10 +95,10 @@ class GraphObjectBuilderTest extends Specification {
         }
 
         then:
-        graph.findVertexByName('person').first().id == 123
+        graph.findVertexByName('person').get()
+                .getConditions().contains(new IdCondition<Integer>(123))
     }
 
-    @Ignore('TODO')
     def "method in builder can has implicit property id"() {
         when:
         def graph = builder.graph {
@@ -106,18 +106,31 @@ class GraphObjectBuilderTest extends Specification {
         }
 
         then:
-        graph.findVertexByName('person').first().id == 123
+        graph.findVertexByName('person').get()
+                .getConditions().contains(new IdCondition<>(123))
     }
 
-    @Ignore('TODO')
     def "parameter id shouldn't have concrete type"() {
         when:
         def graph = builder.graph {
-            person(id: "i13dsr") {}
+            person(id: 'i13dsr') {}
         }
 
         then:
-        graph.findVertexByName('person').first().id == 'i13dsr'
+        graph.findVertexByName('person').get()
+                .getConditions().contains(new IdCondition<>('i13dsr'))
+    }
+
+    def "if in params for vertex contains default value and id with different value that method should use value"() {
+        when:
+        def graph = builder.graph {
+            person(42, id: 'id')
+        }
+
+        then:
+        graph.findVertexByName('person').get()
+                .getConditions().contains(new IdCondition<>(42))
+
     }
 
     @Ignore('TODO')

@@ -1,7 +1,7 @@
 package ru.osslabs.lang
 
 import ru.osslabs.integrations.lang.domain.GraphEdge
-import ru.osslabs.integrations.lang.domain.UUIDGraphVertex
+import ru.osslabs.integrations.lang.domain.BuilderVertex
 import spock.lang.Specification
 
 /**
@@ -12,7 +12,7 @@ class BuilderGraphTest extends Specification {
 
     def "if vertex with name has in graph that simple contains method in graph should return true"() {
         given:
-        graph.addVertices(['v1'] as UUIDGraphVertex, ['v2'] as UUIDGraphVertex, ['v3'] as UUIDGraphVertex)
+        graph.addVertices(['v1'] as BuilderVertex, ['v2'] as BuilderVertex, ['v3'] as BuilderVertex)
 
         expect:
         graph.containsVertexByName('v1')
@@ -23,9 +23,9 @@ class BuilderGraphTest extends Specification {
 
     def "if graph has edge between to vertices that outgoing contains method should return true"() {
         given:
-        def v1 = ['v1'] as UUIDGraphVertex
-        def v2 = ['v2'] as UUIDGraphVertex
-        def v3 = ['v3'] as UUIDGraphVertex
+        def v1 = ['v1'] as BuilderVertex
+        def v2 = ['v2'] as BuilderVertex
+        def v3 = ['v3'] as BuilderVertex
         graph.addVertices(v1, v2, v3).addEdge(v1, v2).addEdge(v1, v3)
 
         expect:
@@ -38,7 +38,7 @@ class BuilderGraphTest extends Specification {
 
     def "if vertex with name has in graph that graph should return that by name"() {
         given:
-        def v1 = ['v1'] as UUIDGraphVertex
+        def v1 = ['v1'] as BuilderVertex
         graph.addVertices(v1)
 
         expect:

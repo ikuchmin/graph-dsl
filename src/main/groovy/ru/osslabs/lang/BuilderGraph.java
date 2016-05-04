@@ -5,7 +5,7 @@ import ru.osslabs.graph.collection.SimpleGraphMap;
 import ru.osslabs.graph.impl.AbstractDirectedGraph;
 import ru.osslabs.graph.impl.DirectedEdgeContainer;
 import ru.osslabs.integrations.lang.domain.GraphEdge;
-import ru.osslabs.integrations.lang.domain.UUIDGraphVertex;
+import ru.osslabs.integrations.lang.domain.BuilderVertex;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,35 +19,35 @@ import java.util.stream.Collectors;
  * Created by ikuchmin on 27.03.16.
  */
 
-public class BuilderGraph extends AbstractDirectedGraph<UUIDGraphVertex, GraphEdge<UUIDGraphVertex>, BuilderGraph, SimpleGraphMap<UUIDGraphVertex, DirectedEdgeContainer<UUIDGraphVertex, GraphEdge<UUIDGraphVertex>>>>
-        implements DirectedGraph<UUIDGraphVertex, GraphEdge<UUIDGraphVertex>, BuilderGraph> {
+public class BuilderGraph extends AbstractDirectedGraph<BuilderVertex, GraphEdge<BuilderVertex>, BuilderGraph, SimpleGraphMap<BuilderVertex, DirectedEdgeContainer<BuilderVertex, GraphEdge<BuilderVertex>>>>
+        implements DirectedGraph<BuilderVertex, GraphEdge<BuilderVertex>, BuilderGraph> {
 
-    final BiFunction<UUIDGraphVertex, UUIDGraphVertex, GraphEdge<UUIDGraphVertex>> edgeFactory;
-    final SimpleGraphMap<UUIDGraphVertex, DirectedEdgeContainer<UUIDGraphVertex, GraphEdge<UUIDGraphVertex>>> innerMap = new SimpleGraphMap<>();
+    final BiFunction<BuilderVertex, BuilderVertex, GraphEdge<BuilderVertex>> edgeFactory;
+    final SimpleGraphMap<BuilderVertex, DirectedEdgeContainer<BuilderVertex, GraphEdge<BuilderVertex>>> innerMap = new SimpleGraphMap<>();
 
-    BuilderGraph(BiFunction<UUIDGraphVertex, UUIDGraphVertex, GraphEdge<UUIDGraphVertex>> edgeFactory) {
+    BuilderGraph(BiFunction<BuilderVertex, BuilderVertex, GraphEdge<BuilderVertex>> edgeFactory) {
         this.edgeFactory = edgeFactory;
     }
 
     @Override
-    protected SimpleGraphMap<UUIDGraphVertex, DirectedEdgeContainer<UUIDGraphVertex, GraphEdge<UUIDGraphVertex>>> getGraphMap() {
+    protected SimpleGraphMap<BuilderVertex, DirectedEdgeContainer<BuilderVertex, GraphEdge<BuilderVertex>>> getGraphMap() {
         return this.innerMap;
     }
 
     @Override
-    public BiFunction<UUIDGraphVertex, UUIDGraphVertex, GraphEdge<UUIDGraphVertex>> getEdgeFactory() {
+    public BiFunction<BuilderVertex, BuilderVertex, GraphEdge<BuilderVertex>> getEdgeFactory() {
         return this.edgeFactory;
     }
 
-    public Optional<UUIDGraphVertex> findVertexByName(String name) {
+    public Optional<BuilderVertex> findVertexByName(String name) {
         return innerMap.keys().stream().filter(k -> k.getName().equals(name)).findFirst();
     }
 
     public List<Boolean> containsOutgoingVerticesByName(String vertex, String... vertices) {
-        Optional<UUIDGraphVertex> parent = findVertexByName(vertex);
+        Optional<BuilderVertex> parent = findVertexByName(vertex);
         if (!parent.isPresent()) return Arrays.stream(vertices).map(v -> false).collect(Collectors.toList());
 
-        Function<String, Optional<UUIDGraphVertex>> outgoingVertexByName = v ->
+        Function<String, Optional<BuilderVertex>> outgoingVertexByName = v ->
                 outgoingEdgesOf(parent.get()).stream()
                         .map(GraphEdge::getTarget)
                         .filter(ov -> ov.getName().equals(v))
